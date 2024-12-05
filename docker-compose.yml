@@ -1,27 +1,37 @@
 version: '3.8'
 
 services:
+  frontend:
+    build:
+      context: ./frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - ./svm_service:/app/svm_service
+      - ./vgg_service:/app/vgg_service
+    ports:
+      - "8501:8501"
+    depends_on:
+      - svm_service
+      - vgg19_service
   svm_service:
-    build: ./svm_service
+    build:
+      context: ./svm_service
     ports:
       - "5000:5000"
   
   vgg19_service:
-    build: ./vgg19_service
+    build:
+      context: ./vgg_service
+    volumes:
+      - ./vgg_service:/app/vgg_service
     ports:
       - "5001:5001"
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-
   jenkins:
-    build: .  
+    image: jenkins/jenkins:lts
     container_name: jenkins
     ports:
-      - "8080:8080"  
-      - "50000:50000"  
+      - "8080:8080"      
+      - "50000:50000"    
     volumes:
       - jenkins_home:/var/jenkins_home  
     environment:

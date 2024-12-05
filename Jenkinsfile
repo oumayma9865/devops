@@ -4,6 +4,16 @@ pipeline {
         DOCKER_REGISTRY = "${params.DOCKER_REGISTRY}" 
         REPO = "${params.REPO}"  
     }
+     stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    sh 'git config --global http.postBuffer 524288000'
+                }
+                checkout scm
+            }
+        }
+    }
     stages {
         stage('Clone Repository') {
             steps {

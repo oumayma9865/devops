@@ -4,14 +4,14 @@ import numpy as np
 import joblib
 import tensorflow as tf
 
-model = tf.keras.models.load_model('vgg_genre_model.h5')
+model = tf.keras.models.load_model('/app/vgg_service/vgg_genre_model.h5')
 label_encoder = joblib.load('label_encoder.pkl')
 
 st.title("Prédiction du genre de musique avec 'VGG'")
 
 audio_file = st.file_uploader("Charger un fichier audio", type=["wav", "mp3"])
 if audio_file is not None:
-    with open("temp_audio_file.wav", "wb") as f:
+    with open("../temp_audio_file.wav", "wb") as f:
         f.write(audio_file.getbuffer())
 
     y, sr = librosa.load("temp_audio_file.wav", sr=None)
