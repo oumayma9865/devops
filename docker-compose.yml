@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  svm_service:
+    build: ./svm_service
+    ports:
+      - "5000:5000"
+  
+  vgg19_service:
+    build: ./vgg19_service
+    ports:
+      - "5001:5001"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+  jenkins:
+    build: .  
+    container_name: jenkins
+    ports:
+      - "8080:8080"  
+      - "50000:50000"  
+    volumes:
+      - jenkins_home:/var/jenkins_home  
+    environment:
+      - JAVA_OPTS="-Djenkins.install.runSetupWizard=false" 
+    networks:
+      - app-network
+
+volumes:
+  jenkins_home:
+
+networks:
+  app-network:
+    driver: bridge
