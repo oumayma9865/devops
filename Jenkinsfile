@@ -4,7 +4,8 @@ pipeline {
         DOCKER_REGISTRY = "${params.DOCKER_REGISTRY}" 
         REPO = "${params.REPO}"  
     }
-     stages {
+     
+    stages {
         stage('Checkout') {
             steps {
                 script {
@@ -13,8 +14,6 @@ pipeline {
                 checkout scm
             }
         }
-    }
-    stages {
         stage('Clone Repository') {
             steps {
                 git url: "${params.REPO}", branch: 'main'
