@@ -28,7 +28,8 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh 'docker-compose up '
+                sh 'docker-compose down -v'
+                sh 'docker-compose up -d'
                 sh 'docker exec svm_service pytest /tests/test.py'
                
             }
