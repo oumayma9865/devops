@@ -30,7 +30,7 @@ pipeline {
             steps {
                 sh 'docker-compose down -v'
                 sh 'docker-compose up -d'
-                sh 'docker exec svm_service pytest /tests/test.py'
+                sh 'docker exec devops-project_svm_service  pytest /tests/test.py'
                
             }
         }
