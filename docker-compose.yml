@@ -28,8 +28,7 @@ services:
       - "5001:5001"
   jenkins:
     build:
-    context: . 
-    dockerfile: Dockerfile
+      context: .  
     container_name: jenkins
     ports:
       - "8080:8080"
