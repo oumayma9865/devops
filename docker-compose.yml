@@ -3,49 +3,57 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./frontend
+      context: ./frontend  # Assurez-vous que ce répertoire existe
     volumes:
       - ./frontend:/app/frontend
       - ./svm_service:/app/svm_service
       - ./vgg_service:/app/vgg_service
     ports:
-      - "8501:8501"
+      - "8501:8501"  # Le port 8501 est exposé sur l'hôte
     depends_on:
       - svm_service
       - vgg19_service
+    networks:
+      - app-network  # Spécifie que le frontend fait partie du réseau
+
   svm_service:
     build:
-      context: ./svm_service
+      context: ./svm_service  # Vérifiez que ce répertoire existe
     ports:
-      - "5000:5000"
-  
+      - "5000:5000"  # Le port 5000 est exposé sur l'hôte
+    networks:
+      - app-network  # Réseau partagé
+
   vgg19_service:
     build:
-      context: ./vgg_service
+      context: ./vgg_service  # Vérifiez que ce répertoire existe
     volumes:
-      - ./vgg_service:/app/vgg_service
+      - ./vgg_service:/app/vgg_service  # Monter le répertoire du service
     ports:
-      - "5001:5001"
-  jenkins-project:
+      - "5001:5001"  # Le port 5001 est exposé sur l'hôte
+    networks:
+      - app-network  # Réseau partagé
+
+  jenkins-project:  # Le nom du service Jenkins
     build:
-      context: .  
+      context: .  # Assurez-vous que le Dockerfile de Jenkins est dans le répertoire courant
     container_name: jenkins-project
     ports:
-      - "8081:8080"
-      - "50000:50000"
+      - "8081:8080"  # Jenkins accessible sur le port 8081 de l'hôte
+      - "50000:50000"  # Port de communication pour les agents Jenkins
     volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock 
-      - /usr/local/bin/docker:/usr/local/bin/docker
+      - jenkins_home:/var/jenkins_home  # Volume pour la persistance des données de Jenkins
+      - /var/run/docker.sock:/var/run/docker.sock  # Permet à Jenkins d'utiliser Docker
+      - /usr/local/bin/docker:/usr/local/bin/docker  # Permet à Jenkins d'utiliser Docker
     environment:
-      - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
-    user: root 
+      - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"  # Désactive l'assistant de configuration
+    user: root  # Exécuter Jenkins avec des privilèges root pour Docker
     networks:
-      - app-network
+      - app-network  # Jenkins appartient également au réseau
 
 volumes:
-  jenkins_home:
+  jenkins_home:  # Volume pour la persistance des données de Jenkins
 
 networks:
   app-network:
-    driver: bridge
+    driver: bridge  # Réseau Docker en mode pont
