@@ -26,10 +26,10 @@ services:
       - ./vgg_service:/app/vgg_service
     ports:
       - "5001:5001"
-  jenkins:
+  jenkins-project:
     build:
       context: .  
-    container_name: jenkins
+    container_name: jenkins-project
     ports:
       - "8080:8080"
       - "50000:50000"

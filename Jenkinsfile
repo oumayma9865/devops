@@ -43,6 +43,9 @@ pipeline {
 
                         sh "docker tag vgg19_service ${DOCKER_REGISTRY}/vgg19_service:latest"
                         sh "docker push ${DOCKER_REGISTRY}/vgg19_service:latest"
+
+                        sh "docker tag frontend ${DOCKER_REGISTRY}/frontend:latest"
+                        sh "docker push ${DOCKER_REGISTRY}/frontend:latest"
                     }
                 }
             }
