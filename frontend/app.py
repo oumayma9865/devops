@@ -1,6 +1,4 @@
 import streamlit as st
-import os
-
 
 st.markdown(
     """
@@ -16,17 +14,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 st.title("Classification du Genre Musical")
 
 # Sélection du modèle
 model_choice = st.selectbox("Choisissez le modèle :", ["SVM", "VGG"])
 
-# Lancer le modèle choisi
+# Bouton pour aller au modèle sélectionné
 if st.button("Aller au modèle sélectionné"):
     if model_choice == "SVM":
-        os.system(f"streamlit run /app/svm_service/svm_service.py")
-        
+        st.markdown('<meta http-equiv="refresh" content="0;URL=http://localhost:5000">', unsafe_allow_html=True)
     elif model_choice == "VGG":
-        os.system(f"streamlit run /app/vgg_service/vgg_service.py")
-        
+        st.markdown('<meta http-equiv="refresh" content="0;URL=http://localhost:5001">', unsafe_allow_html=True)

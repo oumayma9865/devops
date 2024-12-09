@@ -2,7 +2,7 @@ import streamlit as st
 import librosa
 import numpy as np
 import joblib
-model = joblib.load('svmodel.pkl')
+model = joblib.load('/app/svm_service/svmodel.pkl')
 st.title("Prédiction du genre de musique avec 'SVM'")
 
 audio_file = st.file_uploader("Charger un fichier audio", type=["wav", "mp3"])

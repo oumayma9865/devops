@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir streamlit
 EXPOSE 3000
 
 
-CMD ["streamlit", "run", "/app/frontend/app.py"]
+CMD ["streamlit", "run", "app.py"]
