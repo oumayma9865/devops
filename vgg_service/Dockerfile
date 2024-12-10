@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 WORKDIR /app
-COPY ./vgg_service /app/vgg_service
+COPY . /app/
 COPY ./tests /app/tests
 RUN pip install --no-cache-dir --timeout=300 streamlit librosa numpy joblib tensorflow
 RUN pip install pytest
