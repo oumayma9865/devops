@@ -24,9 +24,11 @@ RUN apt-get install -y docker-ce-cli=5:20.10.12~3-0~debian-bullseye
 RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
     -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
 
-RUN groupadd docker
-# Ajouter Jenkins au groupe Docker
-RUN usermod -aG docker jenkins
+# Ajouter l'utilisateur Jenkins au groupe Docker
+RUN groupadd docker && usermod -aG docker jenkins
+
+# Créer un lien symbolique pour le socket Docker si nécessaire
+RUN ln -s /var/run/docker.sock /tmp/docker.sock
 
 # Revenir à l'utilisateur Jenkins
 USER jenkins

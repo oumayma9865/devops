@@ -11,7 +11,7 @@ st.title("Prédiction du genre de musique avec 'VGG'")
 
 audio_file = st.file_uploader("Charger un fichier audio", type=["wav", "mp3"])
 if audio_file is not None:
-    with open("../temp_audio_file.wav", "wb") as f:
+    with open("temp_audio_file.wav", "wb") as f:
         f.write(audio_file.getbuffer())
 
     y, sr = librosa.load("temp_audio_file.wav", sr=None)
