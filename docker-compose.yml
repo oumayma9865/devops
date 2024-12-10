@@ -4,6 +4,8 @@ services:
   frontend:
     build:
       context: ./frontend
+    volumes:
+      - ./tests:/app/tests 
     ports:
       - "8501:8501"
   
@@ -12,6 +14,7 @@ services:
       context: ./svm_service
     volumes:
       - ./svm_service:/app/svm_service
+      - ./tests:/app/tests 
     ports:
       - "5000:5000"
 
@@ -20,6 +23,7 @@ services:
       context: ./vgg_service
     volumes:
       - ./vgg_service:/app/vgg_service
+      - ./tests:/app/tests 
     ports:
       - "5001:5001"
 networks:

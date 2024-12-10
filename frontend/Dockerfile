@@ -9,6 +9,7 @@ COPY . /app/
 
 # Installer Streamlit et d'autres dépendances nécessaires
 RUN pip install --no-cache-dir streamlit
+RUN pip install pytest
 
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
