@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_REGISTRY = "${params.DOCKER_REGISTRY}" 
+        DOCKER_REGISTRY = 'benhleloumayma/devops-project'
         REPO = "${params.REPO}"  
     }
      
