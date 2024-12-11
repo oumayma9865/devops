@@ -67,12 +67,13 @@ pipeline {
                 }
             }
         }
+
         stage('Login to Docker Hub') {
             steps {
                 script {
                     // Connexion à Docker Hub en utilisant les Jenkins Credentials
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                         echo 'Successfully logged in to Docker Hub'
                     }
                 }
@@ -81,17 +82,17 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                        sh "docker tag devops-project_svm_service:latest ${DOCKER_REGISTRY}:svm_service_latest"
-                        sh "docker push ${DOCKER_REGISTRY}:svm_service_latest"
+                script {
+                    sh "docker tag devops-project_svm_service:latest ${DOCKER_REGISTRY}:svm_service_latest"
+                    sh "docker push ${DOCKER_REGISTRY}:svm_service_latest"
 
-                        sh "docker tag devops-project_vgg19_service:latest ${DOCKER_REGISTRY}:vgg19_service_latest"
-                        sh "docker push ${DOCKER_REGISTRY}:vgg19_service_latest"
+                    sh "docker tag devops-project_vgg19_service:latest ${DOCKER_REGISTRY}:vgg19_service_latest"
+                    sh "docker push ${DOCKER_REGISTRY}:vgg19_service_latest"
 
-                        sh "docker tag devops-project_frontend:latest ${DOCKER_REGISTRY}:frontend_latest"
-                        sh "docker push ${DOCKER_REGISTRY}:frontend_latest"
-                    
+                    sh "docker tag devops-project_frontend:latest ${DOCKER_REGISTRY}:frontend_latest"
+                    sh "docker push ${DOCKER_REGISTRY}:frontend_latest"
+                }
             }
-        }
             post {
                 always {
                     echo 'Push Docker Images stage completed.'
