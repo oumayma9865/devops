@@ -72,13 +72,13 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
-                        sh "docker tag svm_service ${DOCKER_REGISTRY}/svm_service:latest"
+                        sh "docker tag devops-project_svm_service:latest ${DOCKER_REGISTRY}/svm_service:latest"
                         sh "docker push ${DOCKER_REGISTRY}/svm_service:latest"
 
-                        sh "docker tag vgg19_service ${DOCKER_REGISTRY}/vgg19_service:latest"
+                        sh "docker tag devops-project_vgg19_service:latest ${DOCKER_REGISTRY}/vgg19_service:latest"
                         sh "docker push ${DOCKER_REGISTRY}/vgg19_service:latest"
 
-                        sh "docker tag frontend ${DOCKER_REGISTRY}/frontend:latest"
+                        sh "docker tag devops-project_frontend:latest ${DOCKER_REGISTRY}/frontend:latest"
                         sh "docker push ${DOCKER_REGISTRY}/frontend:latest"
                     }
                 }
