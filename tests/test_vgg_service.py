@@ -6,8 +6,8 @@ import joblib
 import tensorflow as tf
 
 # Charger le modèle et le label encoder (simule le service Streamlit)
-MODEL_PATH = "../vgg_service/vgg_genre_model.h5"
-LABEL_ENCODER_PATH = "../vgg_service/label_encoder.pkl"
+MODEL_PATH = "/app/vgg_genre_model.h5"
+LABEL_ENCODER_PATH = "/app/label_encoder.pkl"
 
 model = tf.keras.models.load_model(MODEL_PATH)
 label_encoder = joblib.load(LABEL_ENCODER_PATH)
@@ -17,7 +17,7 @@ label_encoder = joblib.load(LABEL_ENCODER_PATH)
 
 # Test 1 : Vérifier qu'un fichier audio valide est correctement traité
 def test_valid_audio_processing():
-    filename = "../temp_audio_file.wav"
+    filename = "/app/temp_audio_file.wav"
     
 
     try:
@@ -47,7 +47,7 @@ def test_valid_audio_processing():
 
 # Test 2 : Vérifier le comportement en cas de fichier audio invalide
 def test_invalid_audio_file():
-    invalid_filename = "test_vgg_service.py"
+    invalid_filename = "/app/test_vgg_service.py"
     with open(invalid_filename, "w") as f:
         f.write("Contenu non audio")
 
