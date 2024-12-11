@@ -11,4 +11,4 @@ RUN pip install -r /app/requirements.txt
 COPY . /app/
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
-CMD ["streamlit", "run", "/app/app.py"]
+CMD ["streamlit", "run", "app.py"]
