@@ -3,19 +3,22 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: ./frontend/Dockerfile
     ports:
       - "8501:8501"
   
   svm_service:
     build:
-      context: ./svm_service
+      context: .
+      dockerfile: ./svm_service/Dockerfile
     ports:
       - "5000:5000"
 
   vgg19_service:
     build:
-      context: ./vgg_service
+      context: .
+      dockerfile: ./vgg_service/Dockerfile
     ports:
       - "5001:5001"
 networks:
