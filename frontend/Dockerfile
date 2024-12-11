@@ -9,8 +9,8 @@ WORKDIR /app
 COPY ./tests/test_frontend.py /app/test_frontend.py
 
 # Installer Streamlit et d'autres dépendances nécessaires
-RUN pip install --no-cache-dir -r streamlit
-RUN pip install  --no-cache-dir -r pytest selenium
+RUN pip install --no-cache-dir  streamlit
+RUN pip install  --no-cache-dir  pytest selenium
 COPY . /app/
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
