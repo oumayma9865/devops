@@ -30,13 +30,18 @@ pipeline {
        //     steps {
        //          sh 'docker-compose down --remove-orphans'
         //         sh 'docker-compose up -d'
-        //         sh 'docker exec devops-project_frontend_1  pytest /app/test_frontend.py'
-       //          sh 'docker exec devops-project_vgg19_service_1   pytest /app/test_vgg_service.py'
-       //          sh 'docker exec devops-project_svm_service_1   pytest /app/test_svm_service.py'
+        //         sh ' docker exec devops-project_frontend_1 pytest /app/test_frontend.py \ --junitxml=/app/results/frontend_results.xml'
+       //          sh 'docker exec devops-project_vgg19_service_1   pytest /app/test_vgg_service.py \ --junitxml=/app/results/vgg_results.xml'
+       //          sh 'docker exec devops-project_svm_service_1   pytest /app/test_svm_service.py \ --junitxml=/app/results/svm_results.xml' 
                
         //     }
        //  } 
-
+       // stage('Archive Test Results') {
+        //    steps {
+        //        archiveArtifacts artifacts: '**/results/*.xml', allowEmptyArchive: true
+         //       junit '**/results/*.xml'
+        //    }
+       // }
         stage('Push Docker Images') {
             steps {
                 script {

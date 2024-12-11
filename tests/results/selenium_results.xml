@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="362.885" timestamp="2024-12-11T10:48:30.340706+01:00" hostname="oumayma-Vostro-3400"><testcase classname="test_frontend" name="test_homepage" time="301.087"><failure message="selenium.common.exceptions.NoSuchDriverException: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location">self = &lt;selenium.webdriver.common.driver_finder.DriverFinder object at 0x78dc15642210&gt;
+
+    def _binary_paths(self) -&gt; dict:
+        if self._paths["driver_path"]:
+            return self._paths
+    
+        browser = self._options.capabilities["browserName"]
+        try:
+            path = self._service.path
+            if path:
+                logger.debug(
+                    "Skipping Selenium Manager; path to %s driver specified in Service class: %s", browser, path
+                )
+                if not Path(path).is_file():
+                    raise ValueError(f"The path is not a valid file: {path}")
+                self._paths["driver_path"] = path
+            else:
+&gt;               output = SeleniumManager().binary_paths(self._to_args())
+
+../myenv/lib/python3.12/site-packages/selenium/webdriver/common/driver_finder.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../myenv/lib/python3.12/site-packages/selenium/webdriver/common/selenium_manager.py:55: in binary_paths
+    return self._run(args)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = ['/home/oumayma/devops-project/myenv/lib/python3.12/site-packages/selenium/webdriver/common/linux/selenium-manager', '--browser', 'chrome', '--language-binding', 'python', '--output', ...]
+
+    @staticmethod
+    def _run(args: List[str]) -&gt; dict:
+        """Executes the Selenium Manager Binary.
+    
+        :Args:
+         - args: the components of the command being executed.
+        :Returns: The log string containing the driver location.
+        """
+        command = " ".join(args)
+        logger.debug("Executing process: %s", command)
+        try:
+            if sys.platform == "win32":
+                completed_proc = subprocess.run(args, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            else:
+                completed_proc = subprocess.run(args, capture_output=True)
+            stdout = completed_proc.stdout.decode("utf-8").rstrip("\n")
+            stderr = completed_proc.stderr.decode("utf-8").rstrip("\n")
+            output = json.loads(stdout) if stdout != "" else {"logs": [], "result": {}}
+        except Exception as err:
+            raise WebDriverException(f"Unsuccessful command executed: {command}") from err
+    
+        SeleniumManager._process_logs(output["logs"])
+        result = output["result"]
+        if completed_proc.returncode:
+&gt;           raise WebDriverException(
+                f"Unsuccessful command executed: {command}; code: {completed_proc.returncode}\n{result}\n{stderr}"
+            )
+E           selenium.common.exceptions.WebDriverException: Message: Unsuccessful command executed: /home/oumayma/devops-project/myenv/lib/python3.12/site-packages/selenium/webdriver/common/linux/selenium-manager --browser chrome --language-binding python --output json; code: 65
+E           {'code': 65, 'message': 'error decoding response body', 'driver_path': '', 'browser_path': ''}
+
+../myenv/lib/python3.12/site-packages/selenium/webdriver/common/selenium_manager.py:129: WebDriverException
+
+The above exception was the direct cause of the following exception:
+
+    def test_homepage():
+&gt;       driver = webdriver.Chrome()  # Ou un autre navigateur
+
+test_frontend.py:5: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../myenv/lib/python3.12/site-packages/selenium/webdriver/chrome/webdriver.py:45: in __init__
+    super().__init__(
+../myenv/lib/python3.12/site-packages/selenium/webdriver/chromium/webdriver.py:50: in __init__
+    if finder.get_browser_path():
+../myenv/lib/python3.12/site-packages/selenium/webdriver/common/driver_finder.py:47: in get_browser_path
+    return self._binary_paths()["browser_path"]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;selenium.webdriver.common.driver_finder.DriverFinder object at 0x78dc15642210&gt;
+
+    def _binary_paths(self) -&gt; dict:
+        if self._paths["driver_path"]:
+            return self._paths
+    
+        browser = self._options.capabilities["browserName"]
+        try:
+            path = self._service.path
+            if path:
+                logger.debug(
+                    "Skipping Selenium Manager; path to %s driver specified in Service class: %s", browser, path
+                )
+                if not Path(path).is_file():
+                    raise ValueError(f"The path is not a valid file: {path}")
+                self._paths["driver_path"] = path
+            else:
+                output = SeleniumManager().binary_paths(self._to_args())
+                if Path(output["driver_path"]).is_file():
+                    self._paths["driver_path"] = output["driver_path"]
+                else:
+                    raise ValueError(f'The driver path is not a valid file: {output["driver_path"]}')
+                if Path(output["browser_path"]).is_file():
+                    self._paths["browser_path"] = output["browser_path"]
+                else:
+                    raise ValueError(f'The browser path is not a valid file: {output["browser_path"]}')
+        except Exception as err:
+            msg = f"Unable to obtain driver for {browser}"
+&gt;           raise NoSuchDriverException(msg) from err
+E           selenium.common.exceptions.NoSuchDriverException: Message: Unable to obtain driver for chrome; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location
+
+../myenv/lib/python3.12/site-packages/selenium/webdriver/common/driver_finder.py:78: NoSuchDriverException</failure></testcase><testcase time="0.000" /></testsuite></testsuites>

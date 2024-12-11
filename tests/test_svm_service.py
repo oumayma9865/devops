@@ -2,7 +2,7 @@ import requests
 
 def test_svm_valid_audio():
     url = "http://localhost:5000"  # URL du service SVM
-    files = {'file': open('valid_audio.wav', 'rb')}  # Remplacer par un fichier audio valide
+    files = {'file': open('temps_audio_file.wav', 'rb')}  # Remplacer par un fichier audio valide
     response = requests.post(url, files=files)
 
     assert response.status_code == 200, "Erreur dans le service SVM"
@@ -10,7 +10,7 @@ def test_svm_valid_audio():
 
 def test_svm_invalid_audio():
     url = "http://localhost:5000"
-    files = {'file': open('invalid_audio.xyz', 'rb')}  # Fichier corrompu ou non supporté
+    files = {'file': open('test_frontend.py', 'rb')}  # Fichier corrompu ou non supporté
     response = requests.post(url, files=files)
 
     assert response.status_code != 200, "Le service SVM a accepté un fichier invalide"

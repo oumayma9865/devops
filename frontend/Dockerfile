@@ -5,13 +5,13 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copier tous les fichiers de votre projet dans le conteneur
-COPY . /app/
+
 COPY ./tests/test_frontend.py /app/test_frontend.py
 
 # Installer Streamlit et d'autres dépendances nécessaires
-RUN pip install --no-cache-dir streamlit
-RUN pip install pytest selenium
-
+RUN pip install --no-cache-dir -r streamlit
+RUN pip install  --no-cache-dir -r pytest selenium
+COPY . /app/
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
 
