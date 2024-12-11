@@ -10,10 +10,10 @@ COPY ./tests/test_frontend.py /app/test_frontend.py
 
 # Installer Streamlit et d'autres dépendances nécessaires
 RUN pip install --no-cache-dir streamlit
-RUN pip install pytest
+RUN pip install pytest selenium
 
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
 
 
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "/app/app.py"]
