@@ -8,7 +8,7 @@ COPY ./frontend/requirements.txt /app/requirements.txt
 
 COPY ./tests/test_frontend.py /app/test_frontend.py
 RUN pip install -r /app/requirements.txt
-COPY . /app/
+COPY ./frontend /app
 # Exposer le port 3000 pour Streamlit
 EXPOSE 3000
-CMD ["streamlit", "run", "app.py"]
+CMD ["streamlit", "run", "/app/app.py"]
