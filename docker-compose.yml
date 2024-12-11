@@ -7,6 +7,8 @@ services:
       dockerfile: ./frontend/Dockerfile
     ports:
       - "8501:8501"
+    networks:
+      - app-network
   
   svm_service:
     build:
@@ -14,6 +16,8 @@ services:
       dockerfile: ./svm_service/Dockerfile
     ports:
       - "5000:5000"
+    networks:
+      - app-network
 
   vgg19_service:
     build:
@@ -21,8 +25,9 @@ services:
       dockerfile: ./vgg_service/Dockerfile
     ports:
       - "5001:5001"
-networks:
-  app-network:
-    driver: bridge
+    networks:
+      - app-network
+
+   
 volumes:
   jenkins_home:
