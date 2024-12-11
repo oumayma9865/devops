@@ -13,7 +13,6 @@ services:
     build:
       context: ./svm_service
     volumes:
-      - ./svm_service:/app/svm_service
       - ./tests:/app/tests 
     ports:
       - "5000:5000"
@@ -22,7 +21,6 @@ services:
     build:
       context: ./vgg_service
     volumes:
-      - ./vgg_service:/app/vgg_service
       - ./tests:/app/tests 
     ports:
       - "5001:5001"
