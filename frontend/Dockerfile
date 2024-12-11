@@ -5,8 +5,6 @@ FROM python:3.9-slim
 WORKDIR /app
 COPY ./frontend/requirements.txt /app/requirements.txt
 # Copier tous les fichiers de votre projet dans le conteneur
-
-COPY ./tests/test_frontend.py /app/test_frontend.py
 RUN pip install -r /app/requirements.txt
 COPY ./frontend /app
 # Exposer le port 3000 pour Streamlit

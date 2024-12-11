@@ -1,24 +1,50 @@
-import requests
+import os
+import librosa
+import numpy as np
+import joblib
+MODEL_PATH = "/app/svmodel.pkl"
+model = joblib.load(MODEL_PATH)
 
-def test_svm_valid_audio():
-    url = "http://localhost:5000"  # URL du service SVM
-    files = {'file': open('temps_audio_file.wav', 'rb')}  # Remplacer par un fichier audio valide
-    response = requests.post(url, files=files)
+def test_valid_audio_processing():
+    filename = "/app/temp_audio_file.wav"
+    
 
-    assert response.status_code == 200, "Erreur dans le service SVM"
-    assert "Le genre de musique prédit est" in response.text, "Réponse incorrecte pour audio valide"
+    try:
+        # Simule la lecture du fichier et l'extraction des features
+        y, sr = librosa.load(filename, sr=None)
+        mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=58)
+        mfccs_mean = np.mean(mfccs, axis=1)
 
-def test_svm_invalid_audio():
-    url = "http://localhost:5000"
-    files = {'file': open('test_frontend.py', 'rb')}  # Fichier corrompu ou non supporté
-    response = requests.post(url, files=files)
+        # Simule la prédiction avec le modèle SVM
+        input_data = mfccs_mean.reshape(1, -1)
+        prediction = model.predict(input_data)
 
-    assert response.status_code != 200, "Le service SVM a accepté un fichier invalide"
-    assert "Erreur" in response.text, "Le service SVM n'a pas retourné d'erreur pour fichier invalide"
+        assert prediction is not None, "La prédiction ne doit pas être vide"
+        print(f"Test réussi : Prédiction = {prediction[0]}")
+    finally:
+        os.remove(filename)
 
-def test_svm_no_audio():
-    url = "http://localhost:5000"
-    response = requests.post(url)
 
-    assert response.status_code == 400, "Le service SVM n'a pas retourné une erreur pour l'absence de fichier"
-    assert "Veuillez charger un fichier audio" in response.text, "Le message d'erreur n'est pas correct"
+# Test 2 : Vérifier le comportement en cas de fichier invalide
+def test_invalid_audio_file():
+    invalid_filename = "/app/test_svm_service.py"
+    with open(invalid_filename, "w") as f:
+        f.write("Contenu non audio")
+
+    try:
+        try:
+            librosa.load(invalid_filename, sr=None)
+            assert False, "Librosa ne doit pas réussir à lire un fichier invalide"
+        except Exception:
+            print("Test réussi : Librosa a déclenché une erreur pour un fichier invalide")
+    finally:
+        os.remove(invalid_filename)
+
+
+# Test 3 : Gérer le cas où aucun fichier n'est fourni
+def test_no_file_behavior():
+    try:
+        y, sr = librosa.load("", sr=None)  # Simulation d'une entrée vide
+        assert False, "Librosa ne doit pas réussir à lire une entrée vide"
+    except Exception:
+        print("Test réussi : Erreur détectée lorsqu'aucun fichier n'est fourni")

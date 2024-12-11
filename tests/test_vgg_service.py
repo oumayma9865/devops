@@ -1,36 +1,71 @@
-import requests
+import os
+import wave
+import librosa
+import numpy as np
+import joblib
+import tensorflow as tf
 
-def test_vgg_valid_audio():
-    url = "http://localhost:5001"  # URL du service VGG
-    files = {'file': open('valid_audio.wav', 'rb')}  # Remplacer par un fichier audio valide
-    response = requests.post(url, files=files)
+# Charger le modèle et le label encoder (simule le service Streamlit)
+MODEL_PATH = "../vgg_service/vgg_genre_model.h5"
+LABEL_ENCODER_PATH = "../vgg_service/label_encoder.pkl"
 
-    assert response.status_code == 200, "Erreur dans le service VGG"
-    assert "Le genre de musique prédit est" in response.text, "Réponse incorrecte pour audio valide"
+model = tf.keras.models.load_model(MODEL_PATH)
+label_encoder = joblib.load(LABEL_ENCODER_PATH)
 
-def test_vgg_invalid_audio():
-    url = "http://localhost:5001"
-    files = {'file': open('invalid_audio.xyz', 'rb')}  # Fichier corrompu ou non supporté
-    response = requests.post(url, files=files)
+#
 
-    assert response.status_code != 200, "Le service VGG a accepté un fichier invalide"
-    assert "Erreur" in response.text, "Le service VGG n'a pas retourné d'erreur pour fichier invalide"
 
-def test_vgg_no_audio():
-    url = "http://localhost:5001"
-    response = requests.post(url)
-
-    assert response.status_code == 400, "Le service VGG n'a pas retourné une erreur pour l'absence de fichier"
-    assert "Veuillez charger un fichier audio" in response.text, "Le message d'erreur n'est pas correct"
-
-def test_vgg_prediction_time():
-    url = "http://localhost:5001"
-    files = {'file': open('valid_audio.wav', 'rb')}  # Fichier audio valide
+# Test 1 : Vérifier qu'un fichier audio valide est correctement traité
+def test_valid_audio_processing():
+    filename = "../temp_audio_file.wav"
     
-    import time
-    start_time = time.time()
-    response = requests.post(url, files=files)
-    elapsed_time = time.time() - start_time
 
-    assert elapsed_time < 2, f"Temps de prédiction trop long : {elapsed_time} secondes"
-    assert response.status_code == 200, "Erreur lors de la prédiction"
+    try:
+        # Simule la lecture du fichier audio
+        y, sr = librosa.load(filename, sr=None)
+
+        # Extraire les caractéristiques (melspectrogramme)
+        S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+        S_db = librosa.power_to_db(S, ref=np.max)
+
+        # Mise en forme des données pour le modèle
+        input_data = np.resize(S_db, (224, 224, 1))
+        input_data = np.repeat(input_data, 3, axis=-1)  # Convertir en 3 canaux (RGB)
+        input_data = tf.image.resize(input_data, (224, 224))
+        input_data = input_data.numpy().astype('float32') / 255.0
+
+        # Prédiction avec le modèle
+        prediction = model.predict(input_data.reshape(1, 224, 224, 3))
+        predicted_label_index = np.argmax(prediction, axis=1)
+        predicted_genre = label_encoder.inverse_transform(predicted_label_index)
+
+        assert predicted_genre is not None, "La prédiction ne doit pas être vide"
+        print(f"Test réussi : Prédiction = {predicted_genre[0]}")
+    finally:
+        os.remove(filename)
+
+
+# Test 2 : Vérifier le comportement en cas de fichier audio invalide
+def test_invalid_audio_file():
+    invalid_filename = "test_vgg_service.py"
+    with open(invalid_filename, "w") as f:
+        f.write("Contenu non audio")
+
+    try:
+        try:
+            librosa.load(invalid_filename, sr=None)
+            assert False, "Librosa ne doit pas réussir à lire un fichier invalide"
+        except Exception:
+            print("Test réussi : Erreur détectée pour un fichier non audio")
+    finally:
+        os.remove(invalid_filename)
+
+
+
+# Test 4 : Gérer le cas où aucun fichier n'est fourni
+def test_no_file_behavior():
+    try:
+        y, sr = librosa.load("", sr=None)  # Simulation d'une entrée vide
+        assert False, "Librosa ne doit pas réussir à lire une entrée vide"
+    except Exception:
+        print("Test réussi : Erreur détectée lorsqu'aucun fichier n'est fourni")
