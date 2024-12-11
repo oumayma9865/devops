@@ -90,8 +90,8 @@ pipeline {
                         sh "docker tag devops-project_frontend:latest ${DOCKER_REGISTRY}:frontend_latest"
                         sh "docker push ${DOCKER_REGISTRY}:frontend_latest"
                     
-                }
             }
+        }
             post {
                 always {
                     echo 'Push Docker Images stage completed.'
