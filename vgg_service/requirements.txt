@@ -1,5 +1,0 @@
-streamlit 
-pytest
-librosa 
-numpy
-joblib
