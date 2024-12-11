@@ -1,0 +1,6 @@
+streamlit 
+pytest
+librosa 
+numpy
+joblib
+tensorflow
