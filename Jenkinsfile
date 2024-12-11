@@ -71,7 +71,7 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
                         sh "docker tag svm_service ${DOCKER_REGISTRY}/svm_service:latest"
                         sh "docker push ${DOCKER_REGISTRY}/svm_service:latest"
 
