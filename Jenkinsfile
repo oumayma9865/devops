@@ -41,9 +41,9 @@ pipeline {
             steps {
                 sh 'docker-compose down --remove-orphans'
                 sh 'docker-compose up -d'
-                sh 'docker exec devops-project_frontend_1  pytest /app/tests/test_frontend.py'
-                sh 'docker exec devops-project_vgg19_service_1   pytest /app/tests/test_vgg_service.py'
-                sh 'docker exec devops-project_svm_service_1   pytest /app/tests/test_svm_service.py'
+                sh 'docker exec devops-project_frontend_1  pytest /app/test_frontend.py'
+                sh 'docker exec devops-project_vgg19_service_1   pytest /app/test_vgg_service.py'
+                sh 'docker exec devops-project_svm_service_1   pytest /app/test_svm_service.py'
                
             }
         }
