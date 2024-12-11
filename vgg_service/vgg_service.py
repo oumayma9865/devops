@@ -4,8 +4,8 @@ import numpy as np
 import joblib
 import tensorflow as tf
 
-model = tf.keras.models.load_model('/app/vgg_service/vgg_genre_model.h5')
-label_encoder = joblib.load('/app/vgg_service/label_encoder.pkl')
+model = tf.keras.models.load_model('/app/vgg_genre_model.h5')
+label_encoder = joblib.load('/app/label_encoder.pkl')
 
 st.title("Prédiction du genre de musique avec 'VGG'")
 

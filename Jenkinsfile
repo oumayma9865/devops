@@ -14,6 +14,17 @@ pipeline {
                 checkout scm
             }
         }
+         stage('Remove .dockerignore') {
+            steps {
+                echo '### Vérification et suppression de .dockerignore ###'
+                sh '''
+                if [ -f .dockerignore ]; then
+                    echo "Suppression du fichier .dockerignore..."
+                    rm -f .dockerignore
+                fi
+                '''
+            }
+        }
         stage('Clone Repository') {
             steps {
                 git url: "${params.REPO}", branch: 'main'

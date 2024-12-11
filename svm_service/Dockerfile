@@ -1,6 +1,7 @@
 FROM python:3.9-slim
 WORKDIR /app
 COPY . /app/
+COPY ./tests/test_svm_service.py /app/test_svm_service.py
 RUN pip install --no-cache-dir streamlit librosa numpy joblib
 RUN pip install pytest
 EXPOSE 5000
