@@ -31,3 +31,6 @@ services:
    
 volumes:
   jenkins_home:
+networks:
+  app-network:   
+    driver: bridge
