@@ -10,12 +10,11 @@ def test_valid_audio_processing():
     
 
     try:
-        # Simule la lecture du fichier et l'extraction des features
         y, sr = librosa.load(filename, sr=None)
         mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=58)
         mfccs_mean = np.mean(mfccs, axis=1)
 
-        # Simule la prédiction avec le modèle SVM
+        
         input_data = mfccs_mean.reshape(1, -1)
         prediction = model.predict(input_data)
 
@@ -44,7 +43,7 @@ def test_invalid_audio_file():
 # Test 3 : Gérer le cas où aucun fichier n'est fourni
 def test_no_file_behavior():
     try:
-        y, sr = librosa.load("", sr=None)  # Simulation d'une entrée vide
+        y, sr = librosa.load("", sr=None)  
         assert False, "Librosa ne doit pas réussir à lire une entrée vide"
     except Exception:
         print("Test réussi : Erreur détectée lorsqu'aucun fichier n'est fourni")

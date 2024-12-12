@@ -5,7 +5,6 @@ import numpy as np
 import joblib
 import tensorflow as tf
 
-# Charger le modèle et le label encoder (simule le service Streamlit)
 MODEL_PATH = "/app/vgg_genre_model.h5"
 LABEL_ENCODER_PATH = "/app/label_encoder.pkl"
 
@@ -21,20 +20,17 @@ def test_valid_audio_processing():
     
 
     try:
-        # Simule la lecture du fichier audio
+      
         y, sr = librosa.load(filename, sr=None)
 
-        # Extraire les caractéristiques (melspectrogramme)
         S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
         S_db = librosa.power_to_db(S, ref=np.max)
 
-        # Mise en forme des données pour le modèle
         input_data = np.resize(S_db, (224, 224, 1))
-        input_data = np.repeat(input_data, 3, axis=-1)  # Convertir en 3 canaux (RGB)
+        input_data = np.repeat(input_data, 3, axis=-1)  
         input_data = tf.image.resize(input_data, (224, 224))
         input_data = input_data.numpy().astype('float32') / 255.0
 
-        # Prédiction avec le modèle
         prediction = model.predict(input_data.reshape(1, 224, 224, 3))
         predicted_label_index = np.argmax(prediction, axis=1)
         predicted_genre = label_encoder.inverse_transform(predicted_label_index)
@@ -65,7 +61,7 @@ def test_invalid_audio_file():
 # Test 4 : Gérer le cas où aucun fichier n'est fourni
 def test_no_file_behavior():
     try:
-        y, sr = librosa.load("", sr=None)  # Simulation d'une entrée vide
+        y, sr = librosa.load("", sr=None) 
         assert False, "Librosa ne doit pas réussir à lire une entrée vide"
     except Exception:
         print("Test réussi : Erreur détectée lorsqu'aucun fichier n'est fourni")
